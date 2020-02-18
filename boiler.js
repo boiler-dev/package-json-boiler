@@ -62,5 +62,11 @@ module.exports.installBoiler = function ({ answers, destDir }) {
     }
   })
 
+  actions.push({
+    action: "npmInstall",
+    dev: true,
+    source: ["boiler-dev"],
+  })
+
   return actions
 }
