@@ -1,7 +1,7 @@
 const boiler = require("boiler-dev")
 const { basename, join } = require("path")
 
-module.exports.promptBoiler = function ({ destDir }) {
+module.exports.prompt = function ({ destDir }) {
   return Promise.all([
     boiler.git.userName(),
     boiler.git.userEmail()
@@ -34,7 +34,7 @@ module.exports.promptBoiler = function ({ destDir }) {
   })
 }
 
-module.exports.installBoiler = function ({ answers, destDir }) {
+module.exports.generate = function ({ answers, destDir }) {
   const actions = []
   const repo = answers.githubOrg + "/" + answers.pkgName
 
