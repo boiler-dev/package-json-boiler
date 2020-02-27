@@ -1,7 +1,7 @@
 const boiler = require("boiler-dev")
 const { basename, join } = require("path")
 
-module.exports.prompt = function ({ destDir }) {
+module.exports.prompt = function ({ rootDirPath }) {
   return Promise.all([
     boiler.git.userName(),
     boiler.git.userEmail()
@@ -11,7 +11,7 @@ module.exports.prompt = function ({ destDir }) {
         type: "input",
         name: "pkgName",
         message: "project name (kebab-case)",
-        default: basename(destDir)
+        default: basename(rootDirPath)
       },
       {
         type: "input",
@@ -34,13 +34,13 @@ module.exports.prompt = function ({ destDir }) {
   })
 }
 
-module.exports.generate = function ({ answers, destDir }) {
+module.exports.generate = function ({ answers, rootDirPath }) {
   const actions = []
   const repo = answers.githubOrg + "/" + answers.pkgName
 
   actions.push({
     action: "write",
-    path: join(destDir, "package.json"),
+    path: join(rootDirPath, "package.json"),
     source: {
       name: answers.pkgName,
       version: "0.0.1",
