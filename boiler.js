@@ -1,6 +1,8 @@
 const boiler = require("boiler-dev")
 const { basename, join } = require("path")
 
+const { fs } = boiler
+
 module.exports.prompt = function ({ cwdPath }) {
   return Promise.all([
     boiler.git.userName(),
@@ -37,10 +39,17 @@ module.exports.prompt = function ({ cwdPath }) {
 module.exports.generate = function ({ answers, cwdPath }) {
   const actions = []
   const repo = answers.githubOrg + "/" + answers.pkgName
+  const pkgJsonPath = join(cwdPath, "package.json")
+
+  let pkgJson
+
+  if (fs.pathExistsSync(pkgJsonPath)) {
+    pkgJson = fs.readJsonSync(pkgJsonPath)
+  }
 
   actions.push({
     action: "write",
-    path: join(cwdPath, "package.json"),
+    path: pkgJsonPath,
     source: {
       name: answers.pkgName,
       version: "0.0.1",
@@ -61,6 +70,14 @@ module.exports.generate = function ({ answers, cwdPath }) {
       dependencies: {}
     }
   })
+
+  if (pkgJson) {
+    actions.push({
+      action: "merge",
+      path: pkgJsonPath,
+      source: pkgJson
+    })
+  }
 
   actions.push({
     action: "npmInstall",
