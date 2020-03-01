@@ -1,4 +1,4 @@
-import boiler, {
+import {
   fs,
   git,
   PromptBoiler,
@@ -7,11 +7,18 @@ import boiler, {
 
 import { basename, join } from "path"
 
-export const prompt: PromptBoiler = async ({ cwdPath }) => {
-  const [name, email] = await Promise.all([
-    git.userName(),
-    git.userEmail(),
-  ])
+export const prompt: PromptBoiler = async ({
+  answers,
+  cwdPath,
+}) => {
+  let { name, email } = answers
+
+  if (!name || !email) {
+    ;[name, email] = await Promise.all([
+      git.userName(),
+      git.userEmail(),
+    ])
+  }
 
   return [
     {
