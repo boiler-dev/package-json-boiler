@@ -41,11 +41,13 @@ module.exports.generate = function ({ answers, cwdPath }) {
   const repo = answers.githubOrg + "/" + answers.pkgName
   const pkgJsonPath = join(cwdPath, "package.json")
 
-  let pkgJson
+  let pkgJson = { dependencies: {}, devDependencies: {} }
 
   if (fs.pathExistsSync(pkgJsonPath)) {
     pkgJson = fs.readJsonSync(pkgJsonPath)
   }
+
+  const { dependencies, devDependencies } = pkgJson
 
   actions.push({
     action: "write",
@@ -66,18 +68,10 @@ module.exports.generate = function ({ answers, cwdPath }) {
         url: "https://github.com/" + repo + "/issues"
       },
       homepage: "https://github.com/" + repo + "#readme",
-      devDependencies: {},
-      dependencies: {}
+      devDependencies,
+      dependencies
     }
   })
-
-  if (pkgJson) {
-    actions.push({
-      action: "merge",
-      path: pkgJsonPath,
-      source: pkgJson
-    })
-  }
 
   actions.push({
     action: "npmInstall",
