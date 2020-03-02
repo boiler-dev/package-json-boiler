@@ -3,6 +3,7 @@ import {
   git,
   PromptBoiler,
   GenerateBoiler,
+  InstallBoiler,
 } from "boiler-dev"
 
 import { basename, join } from "path"
@@ -47,6 +48,18 @@ export const prompt: PromptBoiler = async ({
   ]
 }
 
+export const install: InstallBoiler = async () => {
+  const actions = []
+
+  actions.push({
+    action: "npmInstall",
+    dev: true,
+    source: ["boiler-dev"],
+  })
+
+  return actions
+}
+
 export const generate: GenerateBoiler = async ({
   answers,
   cwdPath,
@@ -85,12 +98,6 @@ export const generate: GenerateBoiler = async ({
       devDependencies,
       dependencies,
     },
-  })
-
-  actions.push({
-    action: "npmInstall",
-    dev: true,
-    source: ["boiler-dev"],
   })
 
   return actions
