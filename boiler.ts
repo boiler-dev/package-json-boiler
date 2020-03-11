@@ -77,7 +77,7 @@ export const generate: ActionBoiler = async ({
 
   actions.push({
     action: "write",
-    path: pkgJsonPath,
+    path: "package.json",
     source: {
       name: answers.pkgName,
       version: "0.0.1",
